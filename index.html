@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Povodlar bo'yicha test</title>
+    <title>Povodlar testi</title>
     <style>
         body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
         .container { width: 100%; max-width: 450px; background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .header { display: flex; justify-content: space-between; font-size: 0.9rem; color: #7f8c8d; margin-bottom: 10px; }
         .timer { background: #e74c3c; color: white; padding: 2px 10px; border-radius: 10px; font-weight: bold; }
-        .progress-bar { height: 8px; background: #eee; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
+        .progress-bar { height: 8px; background: #eee; border-radius: 5px; margin-bottom: 20px; }
         .progress-fill { height: 100%; background: #3498db; width: 0%; }
-        .question-box { background: #ecf0f1; padding: 20px; border-radius: 10px; text-align: center; font-weight: bold; margin-bottom: 20px; min-height: 60px; display: flex; align-items: center; justify-content: center; }
+        .question-box { background: #ecf0f1; padding: 20px; border-radius: 10px; text-align: center; font-weight: bold; margin-bottom: 20px; min-height: 80px; display: flex; align-items: center; justify-content: center; border-left: 5px solid #3498db; }
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .option-btn { padding: 15px; border: 2px solid #34495e; border-radius: 8px; background: white; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
         .mode-btns { display: flex; gap: 10px; margin-bottom: 20px; }
@@ -21,26 +21,31 @@
 </head>
 <body>
     <div class="container">
-        <h3 style="text-align:center;">Povodlar bo'yicha test</h3>
+        <h3 style="text-align:center;">Povodlar testi</h3>
         <div class="mode-btns">
             <button class="mode-btn active" id="btn-doimiy" onclick="setMode('DOIMIY')">Doimiy (81)</button>
             <button class="mode-btn" id="btn-umumiy" onclick="setMode('UMUMIY')">Umumiy (181)</button>
         </div>
         <div class="header">
-            <span id="savol-count">Savol: 1/16</span>
+            <span id="savol-count">Savol: 1</span>
             <span class="timer" id="timer">Vaxt: 20s</span>
             <span id="togri-count">To'g'ri: 0</span>
         </div>
         <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
-        <div class="question-box" id="question">Yuklanmoqda...</div>
+        <div class="question-box" id="question">Boshlashni bosing...</div>
         <div class="options-grid" id="options"></div>
     </div>
 
     <script>
-        // BAZA: 181 ta element
-        const rawPovods = [{num: "97", text: "Қасддан одам ўлдириш"}, /* ... barcha 181 ta ... */ {num: "302", text: "Xizmatga sovuqqonlik bilan qarash"}]; 
-        // 81 ta kod
-        const doimiyList = ["97", "103", /* ... 81 ta kod ... */ "109"]; 
+        const rawPovods = [
+            {num: "97", text: "Қасддан одам ўлдириш"}, {num: "103", text: "Ўзини ўзи ўлдириш даражасига етказиш"},
+            {num: "109", text: "Қасддан баданга енгил шикаст етказиш"}, {num: "112", text: "Ўлдириш ёки зўрлик ишлатиш билан қўрқитиш"},
+            {num: "167", text: "Ўзлаштириш ёки растрата йўли билан талон-тарож қилиш"}, {num: "205", text: "Ҳокимият ёки мансаб ваколатини суистеъмол қилиш"},
+            {num: "266", text: "Транспорт воситалари ҳаракати хавфсизлиги қоидаларини бузиш"}, {num: "277", text: "Безорилик"}
+            // Eslatma: Bu yerga 181 ta povodni to'liq matnli ro'yxatingizdan ko'chirib qo'ying
+        ];
+
+        const doimiyList = ["97", "103", "109", "112", "167", "205", "266", "277"]; 
 
         let mode = 'UMUMIY', score = 0, qIndex = 0, currentQ;
 
@@ -66,12 +71,13 @@
             let html = '';
             options.forEach(o => html += `<button class="option-btn" onclick="check('${o}')">${o}</button>`);
             document.getElementById('options').innerHTML = html;
+            qIndex++;
+            document.getElementById('savol-count').innerText = "Savol: " + qIndex;
         }
 
         function check(val) {
             if(val === currentQ.num) { score++; alert("To'g'ri!"); } 
-            else { alert("Xato! To'g'ri javob: " + currentQ.num); }
-            qIndex++;
+            else { alert("Xato! Javob: " + currentQ.num); }
             document.getElementById('togri-count').innerText = "To'g'ri: " + score;
             nextQuestion();
         }
