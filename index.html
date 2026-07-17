@@ -2,55 +2,52 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Povodlar bo'yicha test</title>
+    <title>Operator Testi</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 20px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 500px; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .mode-btn { padding: 12px; border: 2px solid #bdc3c7; border-radius: 8px; cursor: pointer; background: #ecf0f1; width: 48%; }
-        .mode-btn.active { background: #9b59b6; color: white; border-color: #8e44ad; }
-        .option-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #34495e; border-radius: 8px; cursor: pointer; }
-        .btn { padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; width: 100%; cursor: pointer; font-weight: bold; }
+        body { font-family: sans-serif; padding: 20px; display: flex; justify-content: center; }
+        .box { width: 100%; max-width: 400px; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        .control { margin-bottom: 15px; }
+        select, button { width: 100%; padding: 10px; margin-top: 5px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Povodlar testi</h2>
-        <div id="setup-zone">
-            <button class="mode-btn active" id="btn-doimiy" onclick="setMode('DOIMIY')">Doimiy (81)</button>
-            <button class="mode-btn" id="btn-umumiy" onclick="setMode('UMUMIY')">Umumiy (181)</button>
-            <br><br>
-            <button class="btn" onclick="startGame()">Boshlash 🎮</button>
+    <div class="box">
+        <h3>Sozlamalar</h3>
+        <div class="control">
+            <label>Savollar soni:</label>
+            <select id="q-count">
+                <option value="10">10 ta</option>
+                <option value="20">20 ta</option>
+                <option value="30">30 ta</option>
+            </select>
         </div>
-        <div id="game-zone" style="display:none;">
-            <div id="q-text" style="font-weight:bold; margin-bottom:20px;"></div>
-            <div id="options-container"></div>
+        <div class="control">
+            <label>Taymer (sekund):</label>
+            <select id="q-timer">
+                <option value="30">30 soniya</option>
+                <option value="60">60 soniya</option>
+            </select>
         </div>
+        <button onclick="startApp()">Boshlash</button>
     </div>
 
     <script>
-        // BAZA: Barcha 181 ta ma'lumotni shu yerga qo'ying
-        const rawPovods = [
-            { num: "97", uz: "Қасддан одам ўлдириш", ru: "Умышленное убийство" },
-            // ... (barcha 181 ta elementni qo'shing)
+        // Baza
+        const database = [
+            { id: "97", uz: "Qasd odam o'ldirish", ru: "Umyshlennoe ubiystvo" },
+            { id: "98", uz: "Ruhiy hayajon", ru: "Dushevnoye volnenie" },
+            { id: "99", uz: "Chaqaloq o'ldirish", ru: "Detoubiystvo" },
+            { id: "103", uz: "O'zini o'ldirish", ru: "Samoubiystvo" },
+            { id: "266", uz: "Transport qoidasi", ru: "Pravila transporta" },
+            { id: "277", uz: "Bezorilik", ru: "Huliganstvo" }
         ];
 
-        // 81 ta kodlar
-        const doimiyList = ["97", ...]; 
-
-        let mode = 'DOIMIY';
-
-        function setMode(m) {
-            mode = m;
-            document.getElementById('btn-doimiy').classList.toggle('active', m === 'DOIMIY');
-            document.getElementById('btn-umumiy').classList.toggle('active', m === 'UMUMIY');
-        }
-
-        function startGame() {
-            document.getElementById('setup-zone').style.display = 'none';
-            document.getElementById('game-zone').style.display = 'block';
-            let pool = (mode === 'DOIMIY') ? rawPovods.filter(p => doimiyList.includes(p.num)) : rawPovods;
-            document.getElementById('q-text').innerText = "Tanlangan baza hajmi: " + pool.length;
+        function startApp() {
+            const count = document.getElementById('q-count').value;
+            const timer = document.getElementById('q-timer').value;
+            
+            // Bu yerda o'yin boshlanadi
+            alert("Test boshlandi! Savollar: " + count + ", Taymer: " + timer + " sek.");
         }
     </script>
 </body>
