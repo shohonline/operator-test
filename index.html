@@ -1,13 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>Test sahifasi</title>
+    <title>Povodlar testi</title>
 </head>
 <body>
-    <h1>Salom! Kod ishlayapti.</h1>
+    <h2 id="status">Baza yuklanmoqda...</h2>
+    <div id="test-content"></div>
+
     <script>
-        console.log("Dastur yuklandi!");
+        // Bazaning birinchi qismi
+        const rawPovods = [
+            { num: "97", uz: "Қасддан одам ўлдириш", ru: "Умышленное убийство" },
+            { num: "98", uz: "Кучли руҳий ҳаяжонланиш ҳолатида қасддан одам ўлдириш", ru: "Убийство в состоянии сильного душевного волнения" },
+            { num: "99", uz: "Онанинг ўз чақалоғини қасддан ўлдириши", ru: "Умышленное детоубийство" },
+            { num: "100", uz: "Зарурий мудофаа чегарасидан четга чиқиб қасддан одам ўлдириш", ru: "Убийство при превышении пределов необходимой обороны" }
+        ];
+
+        document.getElementById("status").innerText = "Baza muvaffaqiyatli yuklandi!";
+        document.getElementById("test-content").innerHTML = "Jami savollar soni: " + rawPovods.length;
     </script>
 </body>
 </html>
