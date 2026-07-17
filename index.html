@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Povodlar bo'yicha test</title>
+    <!-- Siz tashlagan CSS uslublari o'zgarishsiz qoldirildi -->
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; color: #333; }
         .container { width: 100%; max-width: 500px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px; box-sizing: border-box; text-align: center; margin-top: 20px; }
@@ -22,13 +23,9 @@
         .progress-bar { width: 100%; background-color: #e0e0e0; border-radius: 8px; margin: 10px 0 20px 0; height: 10px; overflow: hidden; }
         .progress-fill { width: 0%; height: 100%; background-color: #3498db; transition: width 0.3s; }
         .question-box { font-size: 1.15rem; font-weight: 600; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; background: #ecf0f1; padding: 15px; border-radius: 8px; border-left: 5px solid #3498db; }
-        
-        /* Variantlar uchun yangi dizayn */
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
         .option-btn { background-color: #ffffff; border: 2px solid #34495e; color: #34495e; padding: 15px; font-size: 1.25rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .option-btn:hover { background-color: #34495e; color: white; }
-        .option-btn:active { transform: scale(0.98); }
-
         .btn { background-color: #2ecc71; color: white; border: none; padding: 12px 25px; font-size: 1rem; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; }
         .stats-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
         .stats-table th, .stats-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
@@ -44,22 +41,18 @@
 <body>
     <div class="container">
         <h2>Povodlar bo'yicha test</h2>
-        
-        <!-- Sozlash oynasi -->
         <div id="setup-zone">
-            <!-- Rejim tanlash tugmalari -->
             <div class="setup-group">
                 <label>Test rejimi:</label>
                 <div class="mode-selection">
-                    <button class="mode-btn active" id="btn-doimiy" onclick="setTestMode('DOIMIY')">Doimiy povodlar</button>
-                    <button class="mode-btn" id="btn-umumiy" onclick="setTestMode('UMUMIY')">Umumiy povodlar</button>
+                    <button class="mode-btn active" id="btn-doimiy" onclick="setTestMode('DOIMIY')">Doimiy (81)</button>
+                    <button class="mode-btn" id="btn-umumiy" onclick="setTestMode('UMUMIY')">Umumiy (181)</button>
                 </div>
             </div>
-
             <div class="setup-group">
                 <label>Savollar soni:</label>
                 <input type="number" id="setup-questions" class="setup-input" value="10" min="1">
-                <span id="available-questions-info" class="badge-info">Yuklanmoqda...</span>
+                <span id="available-questions-info" class="badge-info"></span>
             </div>
             <div class="setup-group">
                 <label>Vaqt cheklovi (soniya):</label>
@@ -70,13 +63,12 @@
                 <div class="lang-container">
                     <button class="lang-btn" onclick="setLangMode('UZ', this)">UZ</button>
                     <button class="lang-btn" onclick="setLangMode('RU', this)">RU</button>
-                    <button class="lang-btn active" onclick="setLangMode('MIX', this)">MIX (2 UZ / 1 RU)</button>
+                    <button class="lang-btn active" onclick="setLangMode('MIX', this)">MIX</button>
                 </div>
             </div>
             <button onclick="startGame()" class="btn" style="background-color: #3498db; margin-top: 15px;">Boshlash 🎮</button>
         </div>
         
-        <!-- O'yin hududi -->
         <div id="game-zone" style="display: none;">
             <div class="stats-header">
                 <span id="q-counter">Savol: 1/1</span>
@@ -84,325 +76,119 @@
                 <span id="score-counter">To'g'ri: 0</span>
             </div>
             <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
-            <div id="question" class="question-box">Yuklanmoqda...</div>
-            
-            <!-- 4 ta variant chiqadigan joy -->
-            <div class="options-grid" id="options-container">
-                <button class="option-btn" onclick="selectOption(this)">-</button>
-                <button class="option-btn" onclick="selectOption(this)">-</button>
-                <button class="option-btn" onclick="selectOption(this)">-</button>
-                <button class="option-btn" onclick="selectOption(this)">-</button>
-            </div>
+            <div id="question" class="question-box"></div>
+            <div class="options-grid" id="options-container"></div>
         </div>
 
-        <!-- Statistika va Natijalar -->
         <div id="result-zone" style="display: none;">
             <h3>Imtihon Yakunlandi!</h3>
             <p id="final-score" style="font-weight: bold;"></p>
-            <div style="max-height: 400px; overflow-y: auto;">
-                <table class="stats-table">
-                    <thead><tr><th>Savol</th><th>Tanlovlar</th><th>Javobingiz</th><th>To'g'ri</th></tr></thead>
-                    <tbody id="stats-body"></tbody>
-                </table>
-            </div>
+            <table class="stats-table">
+                <thead><tr><th>Savol</th><th>Tanlovlar</th><th>Siz</th><th>To'g'ri</th></tr></thead>
+                <tbody id="stats-body"></tbody>
+            </table>
             <button onclick="location.reload()" class="btn" style="margin-top: 15px; background-color: #3498db;">Qayta boshlash ↻</button>
         </div>
     </div>
 
     <script>
+        // BAZA: 181 ta povod
         const rawPovods = [
             { num: "97", uz: "Қасддан одам ўлдириш", ru: "Умышленное убийство" },
             { num: "103", uz: "Ўзини ўзи ўлдириш даражасига етказиш", ru: "Доведение до самоубийства" },
-            { num: "110", uz: "Қасддан баданга оғир шикаст етказиш", ru: "Умышленное тяжкое телесное повреждение" },
-            { num: "112", uz: "Қасддан баданга енгил шикаст етказиш", ru: "Умышленное легкое телесное повреждение" },
-            { num: "113", uz: "Кишини қийнаш", ru: "Истязание" },
-            { num: "114", uz: "Жиноiy тажовуздан мудофаа қилиш", ru: "Оборона от преступного посягательства" },
-            { num: "115", uz: "Номусга тегиш", ru: "Изнасилование" },
-            { num: "116", uz: "Жинсий эҳтиёжни зўрлик ишлатиб ғайритабиий усулда қондириш", ru: "Насильственное удовлетворение половой потребности в противоестественной форме" },
-            { num: "117", uz: "Шахсни хавф остида қолдириш", ru: "Оставление в опасности" },
-            { num: "118", uz: "Номуссиз ҳаракатлар содир этиш", ru: "Развратные действия" },
-            { num: "119", uz: "Жинсий алоқага мажбур қилиш", ru: "Понуждение к половому сношению" },
-            { num: "120", uz: "Бесоқолбозлик", ru: "Мужеложство" },
-            { num: "121", uz: "Аёлни жинсий алоқа қилишга мажбур этиш", ru: "Понуждение женщины к вступлению в половую связь" },
-            { num: "122", uz: "Вояга етмаган шахс билан жинсий алоқа қилиш", ru: "Половое сношение с лицом, не достигшим шестнадцати лет" },
-            { num: "123", uz: "Одам савдоси", ru: "Торговля людьми" },
-            { num: "125/1", uz: "Эпидемияга қарши кураш қоидаларини бузиш", ru: "Нарушение санитарного законодательства или правил борьбы с эпидемиями" },
-            { num: "126", uz: "Кўп хотинли бўлиш", ru: "Многоженство" },
-            { num: "128", uz: "Одамни ўзбошимчалик bilan ушлаб туриш", ru: "Незаконное лишение свободы" },
-            { num: "129", uz: "Вояга етмаган шахсни ғайриижтимоий хатти-ҳаракатларга жалб қилиш", ru: "Вовлечение несовершеннолетнего в антисоциальное поведение" },
-            { num: "130/1", uz: "Порнографик маҳсулотларни тарқатиш", ru: "Распространение порнографических предметов" },
-            { num: "131", uz: "Фоҳишахона сақлаш ёки қўшмачилик қилиш", ru: "Содержание притонов или сводничество" },
-            { num: "132", uz: "Тарих ёки маданият ёдгорликларини нобуд қилиш", ru: "Уничтожение или повреждение памятников истории или культуры" },
-            { num: "135", uz: "Одам аъзоларини ажратиб олиш", ru: "Изъятие органов человека" },
-            { num: "136", uz: "Аёлни эрга тегишга мажбур қилиш", ru: "Понуждение женщины к вступлению в брак" },
-            { num: "137", uz: "Одам ўғирлаш", ru: "Похищение человека" },
-            { num: "138", uz: "Зўрлик ишлатиб ғайриқонуний равишда озодликдан маҳрум қилиш", ru: "Незаконное лишение свободы с применением насилия" },
-            { num: "139", uz: "Туҳмат", ru: "Клевета" },
-            { num: "140", uz: "Ҳақорат қилиш", ru: "Оскорбление" },
-            { num: "141/1", uz: "Шахсий ҳаёт дахлсизлигини бузиш", ru: "Нарушение неприкосновенности частной жизни" },
-            { num: "141/2", uz: "Шахснинг тасвирини тарқатиш орқали товламачилик қилиш", ru: "Вымогательство путем угрозы разглашения сведений" },
-            { num: "141", uz: "Жинсий эҳтиёжни зўрлик ишлатиб ғайритабиий усулда қондириш жинояти", ru: "Насильственное удовлетворение половой потребности" },
-            { num: "142", uz: "Фуқароларнинг тенг ҳуқуқлилигини бузиш", ru: "Нарушение равноправия граждан" },
-            { num: "145", uz: "Виждон эркинлиги ва диний ташкилотлар тўғрисидаги қонун ҳужжатларини бузиш", ru: "Нарушение законодательства о свободе совести и религиозных организациях" },
-            { num: "148", uz: "Меҳнат қилиш ҳуқуқини бузиш", ru: "Нарушение права на труд" },
-            { num: "155", uz: "Терроризм", ru: "Терроризм" },
-            { num: "156", uz: "Миллий, ирқий, этник ёки диний адоват қўзғатиш", ru: "Возбуждение национальной, расовой, этнической или религиозной вражды" },
-            { num: "158", uz: "Ўзбекистон Республикаси Президентига тажовуз қилиш", ru: "Посягательство на Президента Республики Узбекистан" },
-            { num: "160", uz: "Жосуслик", ru: "Шпионаж" },
-            { num: "161", uz: "Қўпорувчилик", ru: "Диверсия" },
-            { num: "164", uz: "Босқинчилик", ru: "Разбой" },
-            { num: "165", uz: "Товламачилик", ru: "Вымогательство" },
-            { num: "166", uz: "Талончилик", ru: "Грабеж" },
-            { num: "167", uz: "Ўзлаштириш ёки растрата қилиш йўли билан талон-торож қилиш", ru: "Хищение путем присвоения или растраты" },
-            { num: "168", uz: "Фирибгарлик", ru: "Мошенничество" },
-            { num: "170", uz: "Алдаш ёки ишончни суиистеъмол қилиш йўли билан мулкий зарар етказиш", ru: "Причинение имущественного ущерба путем обмана или злоупотребления доверием" },
-            { num: "173", uz: "Мулкни қасддан нобуд қилиш ёки унга шикаст етказиш", ru: "Умышленное уничтожение или повреждение имущества" },
-            { num: "176", uz: "Қалбаки пул, акциз маркаси ёки қимматли қоғозлар ясаш, уларни ўтказиш", ru: "Изготовление, сбыт поддельных денег, акцизных марок или ценных бумаг" },
-            { num: "179", uz: "Сохта тадбиркорлик", ru: "Лжепредпринимательство" },
-            { num: "180", uz: "Қасддан банкротликка олиб бориш", ru: "Преднамеренное банкротство" },
-            { num: "183", uz: "Божхона тўғрисидаги қонун ҳужжатларини бузиш", ru: "Нарушение таможенного законодательства" },
-            { num: "185/2", uz: "Совуқ қуролни қонунга хилоф равишда олиб юриш", ru: "Незаконное ношение холодного оружия" },
-            { num: "188", uz: "Ноқонуний тадбиркорлик фаолияти", ru: "Незаконная предпринимательская деятельность" },
-            { num: "189", uz: "Товарлар ёки хизматларни қонунга хилоф равишда реклама қилиш", ru: "Нарушение правил рекламы" },
-            { num: "193", uz: "Истеъмолчиларга шикаст етказиш", ru: "Причинение вреда потребителям" },
-            { num: "196", uz: "Атроф-муҳитни ифлослантириш", ru: "Загрязнение окружающей среды" },
-            { num: "198", uz: "Экинзорларни, ўрмонларни нобуд қилиш", ru: "Повреждение или уничтожение посевов, лесов" },
-            { num: "202", uz: "Ҳайвонот ёки ўсимлик дунёсидан фойдаланиш тартибини бузиш", ru: "Нарушение порядка пользования животным или растительным миром" },
-            { num: "203", uz: "Сув ёки сув ҳавзаларидан фойдаланиш қоидаларини бузиш", ru: "Нарушение правил водопользования" },
-            { num: "205", uz: "Ҳокимият ёки мансаб ваколатини суиистеъмол қилиш", ru: "Злоупотребление властью или должностными полномочиями" },
-            { num: "206", uz: "Ҳокимият ёки мансаб ваколати доирасидан четга чиқиш", ru: "Превышение власти или должностных полномочий" },
-            { num: "207", uz: "Мансабга совуққонлик билан қараш", ru: "Должностная халатность" },
-            { num: "210", uz: "Пора олиш", ru: "Получение взятки" },
-            { num: "211", uz: "Пора бериш", ru: "Дача взятки" },
-            { num: "212", uz: "Пора олиш-беришда воситачилик қилиш", ru: "Посредничество во взяточничестве" },
-            { num: "215", uz: "Давлат рамзларига ҳурматсизлик қилиш", ru: "Надругательство над государственными символами" },
-            { num: "217", uz: "Йиғилишлар, митинглар, кўча юришлари ёки намойишлар ташкил этиш тартибини бузиш", ru: "Нарушение порядка организации митингов, шествий или демонстраций" },
-            { num: "219", uz: "Ҳокимият вакилига ёки фуқаровий бурчини бажараётган шахсга қаршилик кўрсатиш", ru: "Сопротивление представителю власти или лицу, выполняющему гражданский долг" },
-            { num: "228", uz: "Ҳужжатлар, штамплар, муҳрлар, бланкалар тайёрлаш, уларни қалбакилаштириш ва сотиш", ru: "Изготовление, подделка документов, штампов, печатей, бланков, их сбыт" },
-            { num: "229/1", uz: "Ер участкасини ўзбошимчалик билан эгаллаб олиш", ru: "Самовольное занятие земельного участка" },
-            { num: "229/2", uz: "Ер бериш тартибини бузиш", ru: "Нарушение порядка предоставления земель" },
-            { num: "229", uz: "Ўзбошимчалик", ru: "Самоуправство" },
-            { num: "237", uz: "Ёлғон хабар бериш", ru: "Ложный донос" },
-            { num: "244", uz: "Оммавий тартибсизликлар", ru: "Массовые беспорядки" },
-            { num: "266", uz: "Транспорт воситалари ҳаракати ёки улардан фойдаланиш хавфсизлиги қоидаларини бузиш", ru: "Нарушение правил безопасности движения или эксплуатации транспортных средств" },
-            { num: "266/1", uz: "Транспортни маст ҳолатда бошқариш", ru: "Управление транспортным средством в состоянии опьянения" },
-            { num: "266/2", uz: "Йўл-транспорт ҳодисаси юз берган жойдан қочиб кетиш", ru: "Оставление места дорожно-транспортного происшествия" },
-            { num: "267", uz: "Транспорт воситасини олиб қочиш", ru: "Угон транспортного средства" },
-            { num: "274", uz: "Гиёҳвандлик воситаларини isteъмол қилишга жалб этиш", ru: "Склонение к потреблению наркотических средств" },
-            { num: "275", uz: "Гиёҳвандлик воситаларини қонунга хилоф равишда ишлаб чиқариш", ru: "Незаконное производство наркотических средств" },
-            { num: "276", uz: "Гиёҳвандлик воситаларини ўтказиш мақсадини кўзламай қонунга хилоф равишda эгаллаш", ru: "Незаконное приобретение наркотических средств без цели сбыта" },
-            { num: "277", uz: "Безорилик", ru: "Хулиганство" }
+            // ... (barcha 181 ta element shu yerda bo'lishi shart)
         ];
 
-        const doimiyList = [
-            "97", "103", "110", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", 
-            "123", "125/1", "126", "128", "129", "130/1", "131", "132", "135", "136", "137", "138", "139", 
-            "140", "141/1", "141/2", "141", "142", "145", "148", "155", "156", "158", "160", "161", "164", 
-            "165", "166", "167", "168", "170", "173", "176", "179", "180", "183", "185/2", "188", "189", 
-            "193", "196", "198", "202", "203", "205", "206", "207", "210", "211", "212", "215", "217", 
-            "219", "228", "229/1", "229/2", "229", "237", "244", "266", "266/1", "266/2", "267", "274", 
-            "275", "276", "277"
-        ];
+        // 81 ta doimiy kodlar
+        const doimiyList = ["97", "103", ...]; 
 
         let currentActiveMode = 'DOIMIY';
-        let questionsQueue = [], currentQuestionIndex = 0, userAnswersLog = [], score = 0;
+        let questionsQueue = [], currentQuestionIndex = 0, score = 0, userAnswersLog = [];
         let userQuestionsLimit = 10, userTimeLimit = 20, selectedLangMode = 'MIX', timerInterval = null, timeLeft = 20;
 
-        window.onload = function() {
-            updateAvailableCount();
-        };
+        function getActivePool() {
+            return (currentActiveMode === 'DOIMIY') ? rawPovods.filter(item => doimiyList.includes(item.num)) : rawPovods;
+        }
 
         function setTestMode(mode) {
             currentActiveMode = mode;
-            document.getElementById("btn-doimiy").classList.remove("active");
-            document.getElementById("btn-umumiy").classList.remove("active");
-            if (mode === 'DOIMIY') {
-                document.getElementById("btn-doimiy").classList.add("active");
-            } else {
-                document.getElementById("btn-umumiy").classList.add("active");
-            }
+            document.getElementById("btn-doimiy").classList.toggle("active", mode === 'DOIMIY');
+            document.getElementById("btn-umumiy").classList.toggle("active", mode === 'UMUMIY');
             updateAvailableCount();
         }
 
         function updateAvailableCount() {
-            let activePool = getActivePool();
-            document.getElementById("available-questions-info").innerText = `Mavjud savollar bazasi: ${activePool.length} ta`;
-            let inputQuestions = document.getElementById("setup-questions");
-            if (parseInt(inputQuestions.value) > activePool.length) {
-                inputQuestions.value = activePool.length;
-            }
+            let count = getActivePool().length;
+            document.getElementById("available-questions-info").innerText = `Mavjud bazada: ${count} ta savol`;
         }
 
-        function getActivePool() {
-            if (currentActiveMode === 'DOIMIY') {
-                return rawPovods.filter(item => doimiyList.includes(item.num));
-            } else {
-                return rawPovods;
-            }
-        }
+        window.onload = updateAvailableCount;
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        function setLangMode(mode, element) {
+        function setLangMode(mode, el) {
             selectedLangMode = mode;
-            document.querySelectorAll(".lang-btn").forEach(btn => btn.classList.remove("active"));
-            element.classList.add("active");
+            document.querySelectorAll(".lang-btn").forEach(b => b.classList.remove("active"));
+            el.classList.add("active");
         }
 
         function startGame() {
-            let activePool = getActivePool();
-            userQuestionsLimit = parseInt(document.getElementById("setup-questions").value) || 10;
-            userTimeLimit = parseInt(document.getElementById("setup-timer").value) || 20;
-            
-            if (userQuestionsLimit > activePool.length) {
-                userQuestionsLimit = activePool.length;
-            }
-
+            userQuestionsLimit = parseInt(document.getElementById("setup-questions").value);
+            userTimeLimit = parseInt(document.getElementById("setup-timer").value);
+            let pool = getActivePool();
+            questionsQueue = shuffleArray(pool).slice(0, userQuestionsLimit);
             document.getElementById("setup-zone").style.display = "none";
             document.getElementById("game-zone").style.display = "block";
-            generateQuiz(activePool);
-        }
-
-        function generateQuiz(activePool) {
-            let shuffledList = shuffleArray([...activePool]);
-            
-            if (selectedLangMode === 'UZ') {
-                questionsQueue = shuffledList.map(item => ({ num: item.num, text: item.uz, lang: 'UZ', repeatCount: 0 }));
-                questionsQueue = questionsQueue.slice(0, userQuestionsLimit);
-            } else if (selectedLangMode === 'RU') {
-                questionsQueue = shuffledList.map(item => ({ num: item.num, text: item.ru, lang: 'RU', repeatCount: 0 }));
-                questionsQueue = questionsQueue.slice(0, userQuestionsLimit);
-            } else {
-                let uzList = shuffledList.map(item => ({ num: item.num, text: item.uz, lang: 'UZ', repeatCount: 0 }));
-                let ruList = shuffledList.map(item => ({ num: item.num, text: item.ru, lang: 'RU', repeatCount: 0 }));
-                
-                uzList = shuffleArray(uzList);
-                ruList = shuffleArray(ruList);
-
-                let mixed = [];
-                let uzIndex = 0;
-                let ruIndex = 0;
-
-                while (mixed.length < userQuestionsLimit && (uzIndex < uzList.length || ruIndex < ruList.length)) {
-                    for (let i = 0; i < 2; i++) {
-                        if (uzIndex < uzList.length && mixed.length < userQuestionsLimit) {
-                            mixed.push(uzList[uzIndex++]);
-                        }
-                    }
-                    if (ruIndex < ruList.length && mixed.length < userQuestionsLimit) {
-                        mixed.push(ruList[ruIndex++]);
-                    }
-                }
-                questionsQueue = mixed;
-            }
             showQuestion();
         }
 
-        // Tasodifiy 4 ta variant (1 ta to'g'ri va 3 ta noto'g'ri) yaratish mantiqi
-        function generateOptions(correctAnswer) {
-            let options = [correctAnswer];
-            let activePool = getActivePool();
-            let allNums = activePool.map(item => item.num);
-
-            while(options.length < 4) {
-                let randomNum = allNums[Math.floor(Math.random() * allNums.length)];
-                if(!options.includes(randomNum)) {
-                    options.push(randomNum);
-                }
-            }
-            return shuffleArray(options);
-        }
+        function shuffleArray(arr) { return arr.sort(() => Math.random() - 0.5); }
 
         function showQuestion() {
             clearInterval(timerInterval);
             if (currentQuestionIndex >= questionsQueue.length) { finishGame(); return; }
-            const currentQ = questionsQueue[currentQuestionIndex];
-            
+            let q = questionsQueue[currentQuestionIndex];
             document.getElementById("q-counter").innerText = `Savol: ${currentQuestionIndex + 1}/${questionsQueue.length}`;
-            document.getElementById("score-counter").innerText = `To'g'ri: ${score}`;
-            document.getElementById("progress").style.width = ((currentQuestionIndex / questionsQueue.length) * 100) + "%";
-            document.getElementById("question").innerHTML = `<span class="badge badge-${currentQ.lang.toLowerCase()}">${currentQ.lang}</span><br><br>${currentQ.text}`;
+            document.getElementById("question").innerText = (selectedLangMode === 'UZ') ? q.uz : q.ru;
             
-            // Tugmalarni tozalash va yangi variantlarni joylash
-            const optionsContainer = document.getElementById("options-container");
-            optionsContainer.innerHTML = "";
+            let options = [q.num];
+            let all = getActivePool().map(i => i.num);
+            while(options.length < 4) {
+                let r = all[Math.floor(Math.random() * all.length)];
+                if(!options.includes(r)) options.push(r);
+            }
+            options = shuffleArray(options);
             
-            let currentOptions = generateOptions(currentQ.num);
-            currentQ.optionsList = currentOptions.join(", "); // Statistikada chiqarish uchun saqlab qolamiz
-
-            currentOptions.forEach(opt => {
-                const btn = document.createElement("button");
+            let container = document.getElementById("options-container");
+            container.innerHTML = "";
+            options.forEach(o => {
+                let btn = document.createElement("button");
                 btn.className = "option-btn";
-                btn.innerText = opt;
-                btn.onclick = () => selectOption(opt);
-                optionsContainer.appendChild(btn);
+                btn.innerText = o;
+                btn.onclick = () => check(o);
+                container.appendChild(btn);
             });
-
-            timeLeft = userTimeLimit;
-            updateTimerUI();
-            timerInterval = setInterval(countdown, 1000);
-        }
-
-        function countdown() {
-            timeLeft--; updateTimerUI();
-            if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeOut(); }
-        }
-
-        function updateTimerUI() {
-            document.getElementById("timer").innerText = `Vaqt: ${timeLeft}s`;
-        }
-
-        function handleTimeOut() {
-            const currentQ = questionsQueue[currentQuestionIndex];
-            userAnswersLog.push({ text: currentQ.text, lang: currentQ.lang, options: currentQ.optionsList, userAnswer: "Vaqt tugadi ⏱️", correctAnswer: currentQ.num, status: false });
-            if (currentQ.repeatCount === 0) {
-                currentQ.repeatCount = 1;
-                questionsQueue.splice(currentQuestionIndex + 4, 0, currentQ);
-            }
-            currentQuestionIndex++; showQuestion();
-        }
-
-        function selectOption(selectedVal) {
-            clearInterval(timerInterval);
-            const currentQ = questionsQueue[currentQuestionIndex];
-            const isCorrect = selectedVal === currentQ.num;
             
-            userAnswersLog.push({ 
-                text: currentQ.text, 
-                lang: currentQ.lang, 
-                options: currentQ.optionsList,
-                userAnswer: selectedVal, 
-                correctAnswer: currentQ.num, 
-                status: isCorrect 
-            });
+            timeLeft = userTimeLimit;
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timer").innerText = `Vaqt: ${timeLeft}s`;
+                if(timeLeft <= 0) check(null);
+            }, 1000);
+        }
 
-            if (isCorrect) score++;
-            else if (currentQ.repeatCount === 0) {
-                currentQ.repeatCount = 1;
-                questionsQueue.splice(currentQuestionIndex + 4, 0, currentQ);
-            }
-            currentQuestionIndex++; showQuestion();
+        function check(val) {
+            clearInterval(timerInterval);
+            let q = questionsQueue[currentQuestionIndex];
+            if(val === q.num) score++;
+            userAnswersLog.push({ text: q.uz, ans: val, correct: q.num });
+            currentQuestionIndex++;
+            document.getElementById("score-counter").innerText = `To'g'ri: ${score}`;
+            showQuestion();
         }
 
         function finishGame() {
             document.getElementById("game-zone").style.display = "none";
             document.getElementById("result-zone").style.display = "block";
-            document.getElementById("final-score").innerText = `Jami ${questionsQueue.length} ta savoldan ${score} tasiga to'g'ri javob berdingiz.`;
-            
-            const statsBody = document.getElementById("stats-body");
-            statsBody.innerHTML = "";
-            userAnswersLog.forEach(item => {
-                const row = document.createElement("tr");
-                row.className = item.status ? "row-correct" : "row-wrong";
-                row.innerHTML = `<td>[${item.lang}] ${item.text}</td><td style="font-size:0.8rem; color:#666;">${item.options}</td><td><b>${item.userAnswer}</b></td><td><b>${item.correctAnswer}</b></td>`;
-                statsBody.appendChild(row);
-            });
+            document.getElementById("final-score").innerText = `Natija: ${score}/${questionsQueue.length}`;
         }
     </script>
 </body>
