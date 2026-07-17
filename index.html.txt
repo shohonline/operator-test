@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operatorlar Imtihon Tizimi</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; color: #333; }
+        .container { width: 100%; max-width: 500px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px; box-sizing: border-box; text-align: center; margin-top: 20px; }
+        h2 { color: #2c3e50; margin-top: 0; }
+        .setup-group { margin-bottom: 15px; text-align: left; }
+        .setup-group label { display: block; font-weight: bold; color: #7f8c8d; margin-bottom: 5px; }
+        .setup-input { width: 100%; padding: 10px; font-size: 1rem; border: 2px solid #bdc3c7; border-radius: 8px; box-sizing: border-box; }
+        .lang-container { display: flex; justify-content: space-between; margin-top: 5px; }
+        .lang-btn { flex: 1; background-color: #ecf0f1; border: 2px solid #bdc3c7; padding: 10px; font-size: 1rem; margin: 0 5px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .lang-btn.active { background-color: #3498db; color: white; border-color: #2980b9; }
+        .stats-header { display: flex; justify-content: space-between; font-size: 0.9rem; color: #7f8c8d; align-items: center; margin-bottom: 5px; }
+        .timer-badge { background-color: #e74c3c; color: white; padding: 3px 10px; border-radius: 12px; font-weight: bold; }
+        .progress-bar { width: 100%; background-color: #e0e0e0; border-radius: 8px; margin: 10px 0 20px 0; height: 10px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background-color: #3498db; transition: width 0.3s; }
+        .question-box { font-size: 1.15rem; font-weight: 600; min-height: 80px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; background: #ecf0f1; padding: 15px; border-radius: 8px; border-left: 5px solid #3498db; }
+        .input-box { width: 100%; padding: 12px; font-size: 1.2rem; border: 2px solid #bdc3c7; border-radius: 8px; margin-bottom: 15px; text-align: center; box-sizing: border-box; }
+        .btn { background-color: #2ecc71; color: white; border: none; padding: 12px 25px; font-size: 1rem; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; }
+        .stats-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+        .stats-table th, .stats-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .stats-table th { background-color: #34495e; color: white; }
+        .row-correct { background-color: #d4edda !important; color: #155724; }
+        .row-wrong { background-color: #f8d7da !important; color: #721c24; }
+        .badge { padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; }
+        .badge-uz { background-color: #3498db; color: white; }
+        .badge-ru { background-color: #e67e22; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Imtihon Tizimi</h2>
+        
+        <!-- Sozlash oynasi -->
+        <div id="setup-zone">
+            <div class="setup-group">
+                <label>Savollar soni:</label>
+                <input type="number" id="setup-questions" class="setup-input" value="10" min="1" max="15">
+            </div>
+            <div class="setup-group">
+                <label>Vaqt cheklovi (soniya):</label>
+                <input type="number" id="setup-timer" class="setup-input" value="20" min="5">
+            </div>
+            <div class="setup-group">
+                <label>Savol tili:</label>
+                <div class="lang-container">
+                    <button class="lang-btn" onclick="setLangMode('UZ', this)">UZ</button>
+                    <button class="lang-btn" onclick="setLangMode('RU', this)">RU</button>
+                    <button class="lang-btn active" onclick="setLangMode('MIX', this)">MIX (60/40)</button>
+                </div>
+            </div>
+            <button onclick="startGame()" class="btn" style="background-color: #3498db; margin-top: 15px;">Boshlash 🎮</button>
+        </div>
+        
+        <!-- O'yin hududi -->
+        <div id="game-zone" style="display: none;">
+            <div class="stats-header">
+                <span id="q-counter">Savol: 1/1</span>
+                <span id="timer" class="timer-badge">Vaqt: 20s</span>
+                <span id="score-counter">To'g'ri: 0</span>
+            </div>
+            <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+            <div id="question" class="question-box">Yuklanmoqda...</div>
+            <input type="text" id="answer-input" class="input-box" placeholder="Javobni yozing..." autocomplete="off">
+            <button id="submit-btn" class="btn">Yuborish ➔</button>
+        </div>
+
+        <!-- Statistika va Natijalar -->
+        <div id="result-zone" style="display: none;">
+            <h3>Imtihon Yakunlandi!</h3>
+            <p id="final-score" style="font-weight: bold;"></p>
+            <div style="max-height: 400px; overflow-y: auto;">
+                <table class="stats-table">
+                    <thead><tr><th>Savol</th><th>Javobingiz</th><th>To'g'ri</th></tr></thead>
+                    <tbody id="stats-body"></tbody>
+                </table>
+            </div>
+            <button onclick="location.reload()" class="btn" style="margin-top: 15px; background-color: #3498db;">Qayta boshlash ↻</button>
+        </div>
+    </div>
+
+    <script>
+        // Namuna uchun bazada 5 ta element qoldirdim, bunga o'zingizni povodlaringizni to'liq qo'shib yuborasiz
+        const rawPovods = [
+            { num: "97", uz: "Қасддан одам ўлдириш", ru: "Умышленное убийство" },
+            { num: "98", uz: "Кучли руҳий ҳаяжонланиш ҳолатида қасддан одам ўлдириш", ru: "Умышленное убийство в состоянии сильного душевного волнения" },
+            { num: "99", uz: "Онанинг ўз чақалоғини қасддан ўлдириши", ru: "Убийство матерью своего новорожденного ребенка" },
+            { num: "100", uz: "Зарурий мудофаа чегарасидан четга чиқиб қасддан одам ўлдириш", ru: "Умышленное убийство при превышении пределов необходимой обороны" },
+            { num: "103", uz: "Ўзини ўзи ўлдириш даражасига етказиш", ru: "Доведение до самоубийства" }
+        ];
+
+        let questionsQueue = [], currentQuestionIndex = 0, userAnswersLog = [], score = 0;
+        let userQuestionsLimit = 10, userTimeLimit = 20, selectedLangMode = 'MIX', timerInterval = null, timeLeft = 20;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function setLangMode(mode, element) {
+            selectedLangMode = mode;
+            document.querySelectorAll(".lang-btn").forEach(btn => btn.classList.remove("active"));
+            element.classList.add("active");
+        }
+
+        function startGame() {
+            userQuestionsLimit = parseInt(document.getElementById("setup-questions").value) || 10;
+            userTimeLimit = parseInt(document.getElementById("setup-timer").value) || 20;
+            if (userQuestionsLimit > rawPovods.length) userQuestionsLimit = rawPovods.length;
+
+            document.getElementById("setup-zone").style.display = "none";
+            document.getElementById("game-zone").style.display = "block";
+            generateQuiz();
+        }
+
+        function generateQuiz() {
+            let shuffledList = shuffleArray([...rawPovods]);
+            if (selectedLangMode === 'UZ') {
+                questionsQueue = shuffledList.map(item => ({ num: item.num, text: item.uz, lang: 'UZ', repeatCount: 0 }));
+            } else if (selectedLangMode === 'RU') {
+                questionsQueue = shuffledList.map(item => ({ num: item.num, text: item.ru, lang: 'RU', repeatCount: 0 }));
+            } else {
+                const totalToTake = Math.min(userQuestionsLimit, shuffledList.length);
+                const uzLimit = Math.round(totalToTake * 0.60);
+                questionsQueue = shuffledList.slice(0, totalToTake).map((item, index) => {
+                    const isUz = index < uzLimit;
+                    return { num: item.num, text: isUz ? item.uz : item.ru, lang: isUz ? 'UZ' : 'RU', repeatCount: 0 };
+                });
+                questionsQueue = shuffleArray(questionsQueue);
+            }
+            if (selectedLangMode !== 'MIX') questionsQueue = questionsQueue.slice(0, userQuestionsLimit);
+            showQuestion();
+        }
+
+        function showQuestion() {
+            clearInterval(timerInterval);
+            if (currentQuestionIndex >= questionsQueue.length) { finishGame(); return; }
+            const currentQ = questionsQueue[currentQuestionIndex];
+            
+            document.getElementById("q-counter").innerText = `Savol: ${currentQuestionIndex + 1}/${questionsQueue.length}`;
+            document.getElementById("score-counter").innerText = `To'g'ri: ${score}`;
+            document.getElementById("progress").style.width = ((currentQuestionIndex / questionsQueue.length) * 100) + "%";
+            document.getElementById("question").innerHTML = `<span class="badge badge-${currentQ.lang.toLowerCase()}">${currentQ.lang}</span><br><br>${currentQ.text}`;
+            
+            document.getElementById("answer-input").value = "";
+            document.getElementById("answer-input").focus();
+            timeLeft = userTimeLimit;
+            updateTimerUI();
+            timerInterval = setInterval(countdown, 1000);
+        }
+
+        function countdown() {
+            timeLeft--; updateTimerUI();
+            if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeOut(); }
+        }
+
+        function updateTimerUI() {
+            document.getElementById("timer").innerText = `Vaqt: ${timeLeft}s`;
+        }
+
+        function handleTimeOut() {
+            const currentQ = questionsQueue[currentQuestionIndex];
+            userAnswersLog.push({ text: currentQ.text, lang: currentQ.lang, userAnswer: "Vaqt tugadi ⏱️", correctAnswer: currentQ.num, status: false });
+            if (currentQ.repeatCount === 0) {
+                currentQ.repeatCount = 1;
+                questionsQueue.splice(currentQuestionIndex + 4, 0, currentQ);
+            }
+            currentQuestionIndex++; showQuestion();
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById("answer-input").value.trim();
+            if (userAnswer === "") return;
+            clearInterval(timerInterval);
+
+            const currentQ = questionsQueue[currentQuestionIndex];
+            const isCorrect = userAnswer === currentQ.num;
+            userAnswersLog.push({ text: currentQ.text, lang: currentQ.lang, userAnswer: userAnswer, correctAnswer: currentQ.num, status: isCorrect });
+
+            if (isCorrect) score++;
+            else if (currentQ.repeatCount === 0) {
+                currentQ.repeatCount = 1;
+                questionsQueue.splice(currentQuestionIndex + 4, 0, currentQ);
+            }
+            currentQuestionIndex++; showQuestion();
+        }
+
+        function finishGame() {
+            document.getElementById("game-zone").style.display = "none";
+            document.getElementById("result-zone").style.display = "block";
+            document.getElementById("final-score").innerText = `Jami ${questionsQueue.length} ta savoldan ${score} tasiga to'g'ri javob berdingiz.`;
+            
+            const statsBody = document.getElementById("stats-body");
+            statsBody.innerHTML = "";
+            userAnswersLog.forEach(item => {
+                const row = document.createElement("tr");
+                row.className = item.status ? "row-correct" : "row-wrong";
+                row.innerHTML = `<td>[${item.lang}] ${item.text}</td><td>${item.userAnswer}</td><td>${item.correctAnswer}</td>`;
+                statsBody.appendChild(row);
+            });
+        }
+
+        document.getElementById("answer-input").addEventListener("keypress", function(e) { if (e.key === "Enter") checkAnswer(); });
+        document.getElementById("submit-btn").addEventListener("click", checkAnswer);
+    </script>
+</body>
+</html>
