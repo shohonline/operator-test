@@ -3,86 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Povodlar testi</title>
+    <title>Povodlar bo'yicha test</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
-        .container { width: 100%; max-width: 450px; background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .header { display: flex; justify-content: space-between; font-size: 0.9rem; color: #7f8c8d; margin-bottom: 10px; }
-        .timer { background: #e74c3c; color: white; padding: 2px 10px; border-radius: 10px; font-weight: bold; }
-        .progress-bar { height: 8px; background: #eee; border-radius: 5px; margin-bottom: 20px; }
-        .progress-fill { height: 100%; background: #3498db; width: 0%; }
-        .question-box { background: #ecf0f1; padding: 20px; border-radius: 10px; text-align: center; font-weight: bold; margin-bottom: 20px; min-height: 80px; display: flex; align-items: center; justify-content: center; border-left: 5px solid #3498db; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .option-btn { padding: 15px; border: 2px solid #34495e; border-radius: 8px; background: white; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
-        .mode-btns { display: flex; gap: 10px; margin-bottom: 20px; }
-        .mode-btn { flex: 1; padding: 10px; border: 1px solid #bdc3c7; border-radius: 8px; cursor: pointer; }
-        .mode-btn.active { background: #9b59b6; color: white; }
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; color: #333; }
+        .container { width: 100%; max-width: 500px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px; box-sizing: border-box; text-align: center; margin-top: 20px; }
+        h2 { color: #2c3e50; margin-top: 0; }
+        .mode-selection { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
+        .mode-btn { flex: 1; padding: 12px; font-size: 0.95rem; font-weight: bold; border: 2px solid #bdc3c7; border-radius: 8px; background-color: #ecf0f1; cursor: pointer; transition: 0.2s; }
+        .mode-btn.active { background-color: #9b59b6; color: white; border-color: #8e44ad; }
+        .setup-group { margin-bottom: 15px; text-align: left; }
+        .setup-group label { display: block; font-weight: bold; color: #7f8c8d; margin-bottom: 5px; }
+        .setup-input { width: 100%; padding: 10px; font-size: 1rem; border: 2px solid #bdc3c7; border-radius: 8px; box-sizing: border-box; }
+        .lang-container { display: flex; justify-content: space-between; margin-top: 5px; }
+        .lang-btn { flex: 1; background-color: #ecf0f1; border: 2px solid #bdc3c7; padding: 10px; font-size: 1rem; margin: 0 5px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .lang-btn.active { background-color: #3498db; color: white; border-color: #2980b9; }
+        .stats-header { display: flex; justify-content: space-between; font-size: 0.9rem; color: #7f8c8d; align-items: center; margin-bottom: 5px; }
+        .timer-badge { background-color: #e74c3c; color: white; padding: 3px 10px; border-radius: 12px; font-weight: bold; }
+        .progress-bar { width: 100%; background-color: #e0e0e0; border-radius: 8px; margin: 10px 0 20px 0; height: 10px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background-color: #3498db; transition: width 0.3s; }
+        .question-box { font-size: 1.15rem; font-weight: 600; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; background: #ecf0f1; padding: 15px; border-radius: 8px; border-left: 5px solid #3498db; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .option-btn { background-color: #ffffff; border: 2px solid #34495e; color: #34495e; padding: 15px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .option-btn:hover { background-color: #34495e; color: white; }
+        .btn { background-color: #2ecc71; color: white; border: none; padding: 12px 25px; font-size: 1rem; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; }
+        .stats-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; }
+        .stats-table th, .stats-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .stats-table th { background-color: #34495e; color: white; }
+        .row-correct { background-color: #d4edda; color: #155724; }
+        .row-wrong { background-color: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h3 style="text-align:center;">Povodlar testi</h3>
-        <div class="mode-btns">
-            <button class="mode-btn active" id="btn-doimiy" onclick="setMode('DOIMIY')">Doimiy (81)</button>
-            <button class="mode-btn" id="btn-umumiy" onclick="setMode('UMUMIY')">Umumiy (181)</button>
+        <h2>Povodlar bo'yicha test</h2>
+        <div id="setup-zone">
+            <div class="setup-group">
+                <label>Test rejimi:</label>
+                <div class="mode-selection">
+                    <button class="mode-btn active" id="btn-doimiy" onclick="setTestMode('DOIMIY')">Doimiy</button>
+                    <button class="mode-btn" id="btn-umumiy" onclick="setTestMode('UMUMIY')">Umumiy</button>
+                </div>
+            </div>
+            <div class="setup-group">
+                <label>Savollar soni:</label>
+                <input type="number" id="setup-questions" class="setup-input" value="20">
+                <span id="available-questions-info" style="font-size: 0.8rem; color: #7f8c8d;"></span>
+            </div>
+            <div class="setup-group">
+                <label>Vaqt (s):</label>
+                <input type="number" id="setup-timer" class="setup-input" value="20">
+            </div>
+            <button onclick="startGame()" class="btn">Boshlash 🎮</button>
         </div>
-        <div class="header">
-            <span id="savol-count">Savol: 1</span>
-            <span class="timer" id="timer">Vaxt: 20s</span>
-            <span id="togri-count">To'g'ri: 0</span>
+        
+        <div id="game-zone" style="display: none;">
+            <div class="stats-header">
+                <span id="q-counter"></span>
+                <span id="timer" class="timer-badge"></span>
+            </div>
+            <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+            <div id="question" class="question-box"></div>
+            <div class="options-grid" id="options-container"></div>
         </div>
-        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
-        <div class="question-box" id="question">Boshlashni bosing...</div>
-        <div class="options-grid" id="options"></div>
+
+        <div id="result-zone" style="display: none;">
+            <h3>Natija:</h3>
+            <p id="final-score"></p>
+            <table class="stats-table">
+                <thead><tr><th>Savol</th><th>Javobingiz</th><th>To'g'risi</th></tr></thead>
+                <tbody id="stats-body"></tbody>
+            </table>
+            <button onclick="location.reload()" class="btn" style="margin-top: 15px;">Qayta boshlash ↻</button>
+        </div>
     </div>
 
     <script>
-        const rawPovods = [
-            {num: "97", text: "Қасддан одам ўлдириш"}, {num: "103", text: "Ўзини ўзи ўлдириш даражасига етказиш"},
-            {num: "109", text: "Қасддан баданга енгил шикаст етказиш"}, {num: "112", text: "Ўлдириш ёки зўрлик ишлатиш билан қўрқитиш"},
-            {num: "167", text: "Ўзлаштириш ёки растрата йўли билан талон-тарож қилиш"}, {num: "205", text: "Ҳокимият ёки мансаб ваколатини суистеъмол қилиш"},
-            {num: "266", text: "Транспорт воситалари ҳаракати хавфсизлиги қоидаларини бузиш"}, {num: "277", text: "Безорилик"}
-            // Eslatma: Bu yerga 181 ta povodni to'liq matnli ro'yxatingizdan ko'chirib qo'ying
-        ];
-
-        const doimiyList = ["97", "103", "109", "112", "167", "205", "266", "277"]; 
-
-        let mode = 'UMUMIY', score = 0, qIndex = 0, currentQ;
-
-        function setMode(m) {
-            mode = m;
-            document.getElementById('btn-doimiy').classList.toggle('active', m === 'DOIMIY');
-            document.getElementById('btn-umumiy').classList.toggle('active', m === 'UMUMIY');
-            nextQuestion();
-        }
-
-        function nextQuestion() {
-            let pool = (mode === 'DOIMIY') ? rawPovods.filter(p => doimiyList.includes(p.num)) : rawPovods;
-            currentQ = pool[Math.floor(Math.random() * pool.length)];
-            document.getElementById('question').innerText = currentQ.text;
-            
-            let options = [currentQ.num];
-            while(options.length < 4) {
-                let r = pool[Math.floor(Math.random() * pool.length)].num;
-                if(!options.includes(r)) options.push(r);
-            }
-            options.sort(() => Math.random() - 0.5);
-            
-            let html = '';
-            options.forEach(o => html += `<button class="option-btn" onclick="check('${o}')">${o}</button>`);
-            document.getElementById('options').innerHTML = html;
-            qIndex++;
-            document.getElementById('savol-count').innerText = "Savol: " + qIndex;
-        }
-
-        function check(val) {
-            if(val === currentQ.num) { score++; alert("To'g'ri!"); } 
-            else { alert("Xato! Javob: " + currentQ.num); }
-            document.getElementById('togri-count').innerText = "To'g'ri: " + score;
-            nextQuestion();
-        }
+        const rawPovods = [ /* ... to'liq ro'yxatni shu yerga qo'ying ... */ ];
+        const doimiyPovods = [ { num: "185/2", ... }, /* ... doimiy ro'yxat ... */ ];
         
-        setMode('UMUMIY');
+        let currentTestMode = 'DOIMIY';
+        let gameData = [], currentIndex = 0, score = 0, timerInterval;
+
+        function setTestMode(mode) {
+            currentTestMode = mode;
+            document.getElementById('btn-doimiy').classList.toggle('active', mode === 'DOIMIY');
+            document.getElementById('btn-umumiy').classList.toggle('active', mode === 'UMUMIY');
+        }
+
+        function startGame() {
+            const count = parseInt(document.getElementById('setup-questions').value);
+            const source = (currentTestMode === 'DOIMIY') ? [...doimiyPovods] : [...rawPovods];
+            gameData = source.sort(() => 0.5 - Math.random()).slice(0, count);
+            document.getElementById('setup-zone').style.display = 'none';
+            document.getElementById('game-zone').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentIndex >= gameData.length) return endGame();
+            const q = gameData[currentIndex];
+            document.getElementById('q-counter').innerText = `Savol: ${currentIndex + 1}/${gameData.length}`;
+            document.getElementById('question').innerText = `${q.num} - ${q.uz}`;
+            renderOptions(q);
+            resetTimer();
+        }
+
+        function renderOptions(correctQ) {
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            let options = [correctQ];
+            while(options.length < 4) {
+                let rand = rawPovods[Math.floor(Math.random() * rawPovods.length)];
+                if (!options.find(o => o.num === rand.num)) options.push(rand);
+            }
+            options.sort(() => 0.5 - Math.random());
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.uz;
+                btn.onclick = () => checkAnswer(opt.num === correctQ.num, opt.num);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(isCorrect, selectedNum) {
+            clearInterval(timerInterval);
+            if (isCorrect) score++;
+            
+            const q = gameData[currentIndex];
+            const body = document.getElementById('stats-body');
+            const row = document.createElement('tr');
+            row.className = isCorrect ? 'row-correct' : 'row-wrong';
+            row.innerHTML = `<td>${q.num}</td><td>${selectedNum}</td><td>${q.num}</td>`;
+            body.appendChild(row);
+            
+            currentIndex++;
+            loadQuestion();
+        }
+
+        function resetTimer() {
+            let timeLeft = parseInt(document.getElementById('setup-timer').value);
+            document.getElementById('timer').innerText = `Vaqt: ${timeLeft}s`;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerText = `Vaqt: ${timeLeft}s`;
+                if (timeLeft <= 0) checkAnswer(false, "Vaqt tugadi");
+            }, 1000);
+        }
+
+        function endGame() {
+            document.getElementById('game-zone').style.display = 'none';
+            document.getElementById('result-zone').style.display = 'block';
+            document.getElementById('final-score').innerText = `Siz ${gameData.length} tadan ${score} tasini topdingiz!`;
+        }
     </script>
 </body>
 </html>
