@@ -2,27 +2,55 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Povodlar Testi</title>
-    <script>
-        const rawPovods = [
-            { num: "97", uz: "Қасддан одам ўлдириш", ru: "Умышленное убийство" },
-            { num: "98", uz: "Кучли руҳий ҳаяжонланиш ҳолатида қасддан одам ўлдириш", ru: "Убийство в состоянии сильного душевного волнения" },
-            { num: "99", uz: "Онанинг ўз чақалоғини қасддан ўлдириши", ru: "Умышленное детоубийство" },
-            { num: "100", uz: "Зарурий мудофаа чегарасидан четга чиқиб қасддан одам ўлдириш", ru: "Убийство при превышении пределов необходимой обороны" },
-            { num: "103", uz: "Ўзини ўзи ўлдириш даражасига етказиш", ru: "Доведение до самоубийства" },
-            // ... (bu yerga o'zingizdagi barcha 181 ta qatorni qo'shib chiqing)
-            { num: "277", uz: "Безорилик", ru: "Хулиганство" }
-        ];
-
-        // Sahifa yuklanganda barcha savollarni ko'rsatish
-        window.onload = function() {
-            document.getElementById("status").innerText = "Baza yuklandi!";
-            document.getElementById("count").innerText = "Jami savollar: " + rawPovods.length;
-        };
-    </script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 500px; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .mode-btn { padding: 10px; border: 1px solid #ccc; cursor: pointer; border-radius: 5px; }
+        .active { background: #3498db; color: white; }
+        .option-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #34495e; border-radius: 8px; cursor: pointer; }
+    </style>
 </head>
 <body>
-    <h2 id="status">Yuklanmoqda...</h2>
-    <div id="count"></div>
+    <div class="container">
+        <h2>Povodlar testi</h2>
+        <div id="setup-zone">
+            <button class="mode-btn active" id="btn-doimiy" onclick="setMode('DOIMIY')">Doimiy (81)</button>
+            <button class="mode-btn" id="btn-umumiy" onclick="setMode('UMUMIY')">Umumiy (181)</button>
+            <br><br>
+            <button onclick="startGame()" style="padding:10px; width:100%;">Boshlash</button>
+        </div>
+        <div id="game-zone" style="display:none;">
+            <div id="q-text" style="font-size:1.2rem; font-weight:bold; margin-bottom:20px;"></div>
+            <div id="options-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // 181 ta bazangiz
+        const rawPovods = [
+            { num: "97", uz: "Қасддан одам ўлдириш", ru: "Умышленное убийство" },
+            { num: "103", uz: "Ўзини ўзи ўлдириш даражасига етказиш", ru: "Доведение до самоубийства" }
+            // ... (barcha 181 tasini shu yerga qo'ying)
+        ];
+
+        // 81 ta kodlaringiz
+        const doimiyList = ["97", "103", ...]; 
+
+        let mode = 'DOIMIY';
+
+        function setMode(m) {
+            mode = m;
+            document.getElementById("btn-doimiy").classList.toggle("active", m === 'DOIMIY');
+            document.getElementById("btn-umumiy").classList.toggle("active", m === 'UMUMIY');
+        }
+
+        function startGame() {
+            document.getElementById("setup-zone").style.display = "none";
+            document.getElementById("game-zone").style.display = "block";
+            // Test boshlash logikasi...
+        }
+    </script>
 </body>
 </html>
