@@ -3,11 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Povodlar Testi</title>
-</head>
-<body>
-    <h2 id="status">Baza tekshirilmoqda...</h2>
-    <div id="test-content"></div>
-
     <script>
         const rawPovods = [
             { num: "97", uz: "Қасддан одам ўлдириш", ru: "Умышленное убийство" },
@@ -15,18 +10,19 @@
             { num: "99", uz: "Онанинг ўз чақалоғини қасддан ўлдириши", ru: "Умышленное детоубийство" },
             { num: "100", uz: "Зарурий мудофаа чегарасидан четга чиқиб қасддан одам ўлдириш", ru: "Убийство при превышении пределов необходимой обороны" },
             { num: "103", uz: "Ўзини ўзи ўлдириш даражасига етказиш", ru: "Доведение до самоубийства" },
-            { num: "109", uz: "Қасддан баданга енгил шикаст етказиш", ru: "Умышленное легкое телесное повреждение" },
-            { num: "112", uz: "Ўлдириш ёки зўрлик ишлатиш билан қўрқитиш", ru: "Угроза убийством или применением насилия" },
-            { num: "167", uz: "Ўзлаштириш ёки растрата йўли билан талон-тарож қилиш", ru: "Хищение путем присвоения или растраты" },
-            { num: "205", uz: "Ҳокимият ёки мансаб ваколатини суистеъмол қилиш", ru: "Злоупотребление властью или должностными полномочиями" },
-            { num: "266", uz: "Транспорт воситалари ҳаракати хавфсизлиги қоидаларини бузиш", ru: "Нарушение правил безопасности движения транспортных средств" },
+            // ... (bu yerga o'zingizdagi barcha 181 ta qatorni qo'shib chiqing)
             { num: "277", uz: "Безорилик", ru: "Хулиганство" }
         ];
 
-        // Hozircha 11 ta qo'shdik, agar bu ishlasa, qolganini qo'shamiz.
-        // Iltimos, ushbu kodni joylab, sahifani yangilang.
-        document.getElementById("status").innerText = "Baza muvaffaqiyatli yuklandi!";
-        document.getElementById("test-content").innerText = "Jami savollar soni: " + rawPovods.length;
+        // Sahifa yuklanganda barcha savollarni ko'rsatish
+        window.onload = function() {
+            document.getElementById("status").innerText = "Baza yuklandi!";
+            document.getElementById("count").innerText = "Jami savollar: " + rawPovods.length;
+        };
     </script>
+</head>
+<body>
+    <h2 id="status">Yuklanmoqda...</h2>
+    <div id="count"></div>
 </body>
 </html>
