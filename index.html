@@ -1,42 +1,13 @@
-<script>
-    // 1. Rejim o'zgarishi tugmalari
-    function setTestMode(mode) {
-        currentActiveMode = mode;
-        // Tugmalarni vizual yangilash
-        document.getElementById("btn-doimiy").classList.toggle("active", mode === 'DOIMIY');
-        document.getElementById("btn-umumiy").classList.toggle("active", mode === 'UMUMIY');
-        
-        // Savollar sonini yangilash
-        updateAvailableCount();
-        console.log("Hozirgi rejim:", currentActiveMode);
-    }
-
-    // 2. Boshlash tugmasi (Eng muhim qism)
-    function startGame() {
-        let activePool = getActivePool();
-        if (activePool.length === 0) {
-            alert("Baza bo'sh!");
-            return;
-        }
-
-        userQuestionsLimit = parseInt(document.getElementById("setup-questions").value);
-        userTimeLimit = parseInt(document.getElementById("setup-timer").value);
-        
-        // "setup-zone"ni yashirish va "game-zone"ni ko'rsatish
-        document.getElementById("setup-zone").style.display = "none";
-        document.getElementById("game-zone").style.display = "block";
-        
-        // O'yinni boshlash
-        generateQuiz(activePool);
-    }
-
-    // 3. Savollarni tayyorlash
-    function generateQuiz(activePool) {
-        let shuffledList = shuffleArray([...activePool]);
-        questionsQueue = shuffledList.slice(0, userQuestionsLimit);
-        currentQuestionIndex = 0;
-        score = 0;
-        userAnswersLog = [];
-        showQuestion();
-    }
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test sahifasi</title>
+</head>
+<body>
+    <h1>Salom! Kod ishlayapti.</h1>
+    <script>
+        console.log("Dastur yuklandi!");
+    </script>
+</body>
+</html>
